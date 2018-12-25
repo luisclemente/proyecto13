@@ -1,0 +1,62 @@
+
+    body {
+        font-family: sans-serif;
+        background: url("../imagenes/fondo1.jpg") repeat;
+        /*background-size:;*/
+        background-size: 3000px;
+        padding:10px 0 20px 0;
+    }
+
+    .errorf{
+        color:red;
+        font-size: 80%;
+    }
+
+    form p{
+        margin: 0 0 10px 0;
+        font-size: 1.2em;
+        line-height: 25px;
+    }
+
+    .cajas{
+        border: 3px solid red;
+        border-radius: 20px;
+        padding:10px;
+        background: rgba(109, 219, 199, 0.2);
+        margin: auto;
+    }
+
+    .forms {
+        width: 600px;
+        height: auto;
+    }
+
+    .zona_privada{
+        width: 800px;
+    }
+
+    .caja_entradas {
+        width: 600px;
+        margin-top: 20px;
+        height: auto;
+        overflow:hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+
+    }
+
+    .caja_enlaces{
+        width: 600px;
+        margin: auto;
+        margin-top:20px;
+
+    }
+
+    table {
+        table-layout: fixed;
+    }
+
+    th, td {
+        width: 200px;
+        word-wrap: break-word;
+    }

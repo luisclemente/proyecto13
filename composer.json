@@ -1,0 +1,31 @@
+{
+    "name": "panique/mini3",
+    "description": "MINI3 - an extremely simple naked PHP application",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Panique",
+            "email": "panique@firemail.de"
+        },
+        {
+            "name": "John Dias",
+            "email": "joaodias@noctus.org"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "league/plates": "3.3.*"
+    },
+    "require-dev": {
+        "kint-php/kint": "dev-master"
+    },
+    "autoload":
+    {
+        "psr-4":
+        {
+            "Mini\\" : "application/"
+        }
+    }
+
+}
