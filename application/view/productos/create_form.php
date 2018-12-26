@@ -1,14 +1,6 @@
-<?php
+<?php use Mini\Core\Session; $this->layout ( 'layout' ); Session::init (); ?>
 
-use Mini\Core\Session;
-
-$this->layout ( 'layout' );
-
-Session::init ();
-
-// if ( ! Session::validateSession () ) header ( 'location:../login/warning_zona_restringida.php' );
-
-?>
+<!-- if ( ! Session::validateSession () ) header ( 'location:../login/warning_zona_restringida.php' );-->
 
 <!DOCTYPE html>
 <html>
@@ -101,13 +93,6 @@ Session::init ();
     </form>
 
 
-</div>
-
-<div class="caja_enlaces">
-    <p><a class="btn btn-outline-primary btn-sm" href="../web/zona_privada.php">Regresar a mi zona privada</a></p>
-    <p><a class="btn btn-outline-primary btn-sm" href="../web/zona_publica.php">Ir a la web</a></p>
-    <p><a class="btn btn-outline-primary btn-sm" href="../index.php">Ir a la página principal</a></p>
-    <p><a class="btn btn-outline-primary btn-sm" href="../login/logout.php">Cierra sesión</a></p>
 </div>
 
 </body>

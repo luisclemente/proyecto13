@@ -116,9 +116,6 @@ Session::init ();
 
     <?php endif; ?>
 
-    <p>&nbsp;<a class="btn btn-outline-primary btn-sm" href="/zona_publica.php">Ir a la web</a></p>
-    <p>&nbsp;<a class="btn btn-outline-primary btn-sm" href="../index.php">Ir a la página principal</a></p>
-    <p>&nbsp;<a class="btn btn-outline-primary btn-sm" href="../login/logout.php">Cierra sesión</a></p>
 </div>
 </body>
 </html>

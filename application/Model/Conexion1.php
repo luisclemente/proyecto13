@@ -47,7 +47,7 @@ class Conexion1 extends Database
 
             $stmt->execute ( $this->normalizePrepareArray ( $params ) );
 
-          //  $this->setQuery ( $stmt );
+            $this->setQuery ( $stmt );
 
             return $this->dbh->lastInsertId ();
 
@@ -58,12 +58,15 @@ class Conexion1 extends Database
         }
     }
 
-  /*  public function setQuery ( $sql )
+    public function setQuery ( $sql )
     {
-        if ( $this->modeDEV ) $sql->debugDumpParams ();
+        /*if ( $this->modeDEV )*/
+        echo '<pre>';
+        $sql->debugDumpParams ();
+        echo '</pre>';
     }
 
-    public function lastQuery ()
+   /* public function lastQuery ()
     {
         return $this->lastQuery;
     }*/

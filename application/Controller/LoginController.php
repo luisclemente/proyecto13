@@ -32,8 +32,6 @@ class LoginController extends Controller
 
             } else {
 
-                var_dump ( $_POST[ 'select' ] );
-
                 if ( $_POST[ 'select' ] === 'Nick' ) {
 
                     $data_login = [
@@ -49,13 +47,11 @@ class LoginController extends Controller
                         'email' => $_POST[ 'nickemail' ],
                         'clave' => $_POST[ 'clave' ]
                     ];
-
                 }
 
                 $v->valida_data ( $data_login, $v->errores );
             }
 
-             var_dump ( $v->errores );
             echo '<br><br>';
 
             if ( $v->errores ) echo $this->view->render ( 'users/login_form',
@@ -64,17 +60,12 @@ class LoginController extends Controller
             else {
 
                 $data_login[ 'clave' ] = $user->codificaClave ( $data_login[ 'clave' ] );
-                var_dump ( $data_login[ 'clave' ] ); echo '<br>';
-                var_dump ( $data_login[ 'nickname' ] ); echo '<br>';
-                var_dump ( $data_login[ 'email' ] ); echo '<br>';
 
                 try {
                     // Comprobamos si existe el usuario en la bd
                     $user_bd = $user->get ( $data_login );
-                    var_dump ( $user_bd );
 
                     if ( ! $user_bd ) $v->errores [ 'db_empty' ] = 'Email o clave son incorrectos';
-                    var_dump ( $v->errores );
 
                 } catch ( PDOException $e ) {
 
@@ -93,10 +84,7 @@ class LoginController extends Controller
                     Session::set ( 'nombre', $user_bd->nombre );
                     Session::set ( 'rol', $user_bd->rol );
 
-                    // var_dump ($_SESSION);
-
                     echo (Session::get('nombre'));
-
 
                     $info = date ( 'Y-m-d H:i:s' );
                     setcookie ( 'cookielogin', $info, strtotime ( '+ 30 days' ), '/' );

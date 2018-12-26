@@ -185,7 +185,7 @@ class Validacion extends Conexion1
 
             $data[ $key ] = $this->validaIsset ( $value );
 
-            if ( ! $data[ $key ] ) $params [ $key ] = 'No hemos recibido ' . $key;
+            if ( $data[ $key ] == false) $params [ $key ] = 'No hemos recibido ' . $key;
         }
     }
 

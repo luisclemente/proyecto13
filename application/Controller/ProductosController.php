@@ -14,6 +14,7 @@ use Mini\Model\Usuario;
 use Mini\Model\Producto;
 use Mini\Model\Categoria;
 use Mini\Core\Controller;
+use Mini\Core\File;
 use Mini\Core\Session;
 use Mini\Core\TemplatesFactory;
 
@@ -47,42 +48,46 @@ class ProductosController extends Controller
         }
     }
 
-    public function read ()
+    public function read ( $id = null )
     {
-       // echo $this->view->render ( 'productos/read' );
-
-      //  $v = new Validacion();
-      //  $producto = new Producto ();
-
         try {
 
-            if ( isset( $_POST[ 'boton_busqueda' ] ) ) {
+            if ( $id == null ) {
 
-                $terminoBusqueda = $this->v->validaIsset ( $_POST[ 'termino_busqueda' ] );
+                if ( isset( $_POST[ 'boton_busqueda' ] ) ) {
 
-                if ( ! $terminoBusqueda ) echo '<h5 style="color:red">Introduce un término de búsqueda</h5>';
+                    $terminoBusqueda = $this->v->validaIsset ( $_POST[ 'termino_busqueda' ] );
 
-                elseif ( ! isset( $_POST[ 'opcion' ] ) ) echo '<h5 style="color:red">Introduce una opción</h5>';
+                    if ( ! $terminoBusqueda ) echo '<h5 style="color:red">Introduce un término de búsqueda</h5>';
 
-                else {
+                    elseif ( ! isset( $_POST[ 'opcion' ] ) ) echo '<h5 style="color:red">Introduce una opción</h5>';
 
-                    $opcion = $_POST[ 'opcion' ];
+                    else {
 
-                    $registros = $this->producto->search ( $opcion, $terminoBusqueda );
+                        $opcion = $_POST[ 'opcion' ];
 
-                    if ( ! $registros ) echo '<h5 style="color:red">No se encontraron coincidencias en la búsqueda</h5>';
+                        $registros = $this->producto->search ( $opcion, $terminoBusqueda );
 
-                    else $this->producto->view_search ( $registros );
+                        if ( ! $registros ) echo '<h5 style="color:red">No se encontraron coincidencias en la búsqueda</h5>';
+
+                        else echo $this->view->render ( 'productos/read_all', [ 'registros' => $registros ] );
+                    }
+
+                } else {
+
+                    $registros = $this->producto->get_all ();
+
+                    echo $this->view->render ( 'productos/read_all', [ 'registros' => $registros ] );
+
                 }
 
             } else {
 
-                $registros = $this->producto->get_all ();
+                $registro = $this->producto->get ( [ 'id_producto' => $id ] );
 
-                //$this->producto->view_all ( $registros );
-                echo $this->view->render ( 'productos/read', ['registros' => $registros] );
-
+                echo $this->view->render ( 'productos/read_once', [ 'registro' => $registro ] );
             }
+
 
         } catch ( PDOException $e ) {
 
@@ -117,30 +122,25 @@ class ProductosController extends Controller
                 $categoria = new Categoria();
 
                 try {
-
                     // Capturamos el id de la categoria en la que se va a publicar
                     $id_categoria = $categoria->get ( [ 'nombre' => $data[ 'categoria' ] ] )->id_categoria;
 
-                    $data_create = [
+                    $imag_name = $this->v->filtrar ( File::upFile ( 'imagen' ) );
 
-                        'nombre' => $data[ 'nombre' ],
-                        'descripcion' => $data[ 'descripcion' ],
-                        'marca' => $data[ 'marca' ],
-                        'usuario' => Session::get ( 'nombre' ),
-                        'categoria' => $data[ 'categoria' ],
-                        'id_usuario' => Session::get ( 'id_usuario' ),
-                        'id_categoria' => $id_categoria,
-                        // 'foto' => $nom_imagen
-                    ];
+                    $data_create = array_merge ( $data,
+                        [ 'usuario' => Session::get ( 'nombre' ),
+                            'id_usuario' => Session::get ( 'id_usuario' ),
+                            'id_categoria' => $id_categoria,
+                            'foto' => $imag_name ] );
 
                     $this->producto->insert ( $data_create );
-
-                    header ('Location: /productos/crud');
 
                 } catch ( PDOException $e ) {
 
                     echo 'Error! ' . $e->getMessage () . ' // Linea->' . $e->getLine ();
                 }
+
+                header ('Location: /productos/crud');
             }
         }
     }
@@ -150,11 +150,12 @@ class ProductosController extends Controller
     {
         try {
 
-            if ( ! $_POST ) {
+            $registro = $this->producto->get ( [ 'id_producto' => $id ] );
 
-                $registro = $this->producto->get ( [ 'id_producto' => $id ] );
+            if ( ! $_POST ) { // Si viene del crud
 
-                echo $this->view->render ( 'productos/update_form', [ 'registro' => $registro ] );
+                echo $registro ? $this->view->render ( 'productos/update_form', [ 'registro' => $registro ] ) :
+                    'No se encontraron registros';
 
             } else {
 
@@ -164,10 +165,7 @@ class ProductosController extends Controller
                     'nombre' => $_POST[ 'nombre' ],
                     'descripcion' => $_POST[ 'descripcion' ],
                     'marca' => $_POST[ 'marca' ],
-                    'usuario' => Session::get ( 'nombre' ),
                     'categoria' => $_POST[ 'categoria' ],
-                    'id_usuario' => Session::get ( 'id_usuario' ),
-                    'id_categoria' => $_POST[ 'id_categoria' ]
                 ];
 
                 $this->v->valida_data ( $data_update, $this->v->errores );
@@ -177,64 +175,43 @@ class ProductosController extends Controller
 
                 else {
 
-                    $id_producto = $data_update[ 'id_producto' ];
-                    $categoria = $data_update[ 'categoria' ];
-                    $nombre = $data_update[ 'nombre' ];
+                    $id_producto = [ 'id_producto' => $data_update[ 'id_producto' ] ];
+                    $id_usuario = [ 'id_usuario' => Session::get ( 'id_usuario' ) ];
+                    $categoria = [ 'categoria' => $data_update[ 'categoria' ] ];
+                    $nombre = ['nombre' => $data_update[ 'nombre' ]];
 
-                    /***********   START IMAGENES   ************/
+                    $foto = File::upFile ( 'imagen' );
 
-                    /*  $foto = $nom_imagen;
+                    if ( $foto ) { // Si ha editado la foto
 
-                      if ( $foto ) { // Si ha editado la foto
+                        $this->producto->deleteImage ( $id_producto );
 
-                          $foto_antigua = $producto->get ( [ 'id_producto' => $id ] )->foto;
+                        $data_update[ 'foto' ] = $this->v->filtrar ( $foto );
 
-                          // $producto->deleteImage ( [ 'foto' => $foto_antigua ] );
-                          $producto->deleteImage (  $foto_antigua  );
-
-                          $data_update[ 'foto' ] = $foto;
-
-                      }*/
-
-                    /***********     END IMAGENES   **************/
+                    }
 
                     if ( Session::get ( 'rol' ) !== 'jefe' ) {
                         // Comprobamos que la entrada a editar pertenece al usuario en sesión
-                        $registro = $this->producto->get ( [
-                            'id_producto' => $id_producto,
-                            'id_usuario' => Session::get ( 'id_usuario' )
-                        ] );
+                        $registro = $this->producto->get ( [ $id_producto, $id_usuario ] );
 
                         if ( ! $registro ) $this->v->errores [ 'nombre' ] = 'No puedes editar esta entrada';
 
                         else {
-
                             // Comprobamos si ya existe un registro con un nombre igual en la misma categoria
-                            $registro = $this->producto->get ( [ 'nombre' => $nombre, 'categoria' => $categoria ] );
+                            $registro = $this->producto->get ( [ $nombre, $categoria] );
 
                             // Si existe el nombre y es del usuario en sesion o no existe el nombre
-                            if ( $registro && $registro->id_usuario === Session::get ( 'id_usuario' ) || ! $registro ) {
-
-                                $target_editar = [ 'id_producto' => $id_producto ];
-
-                                $this->producto->update ( $data_update, $target_editar );
-
-                            } else $this->v->errores [ 'nombre' ] = 'El nombre ya existe en esta categoría';
-
+                            $registro && $registro->id_usuario === Session::get ( 'id_usuario' ) || ! $registro ?
+                            $this->producto->update ( $data_update, $id_producto ):
+                            $this->v->errores [ 'nombre' ] = 'El nombre ya existe en esta categoría';
                         }
 
-                    } else {
-
-                        $target_editar = [ 'id_producto' => $id_producto ];
-
-                        $this->producto->update ( $data_update, $target_editar );
-                    }
+                    } else $this->producto->update ( $data_update, $id_producto );
 
                     if ( $this->v->errores ) echo $this->view->render ( 'productos/update_form',
                         [ 'errors' => $this->v->errores, 'data' => $data_update ] );
 
                     else header ( 'location: /productos/crud' );
-
                 }
             }
 
@@ -242,42 +219,35 @@ class ProductosController extends Controller
 
             echo 'Error ' . $e->getMessage () . ' // Linea-> ' . $e->getLine ();
         }
-
-
     }
 
-    public function delete ($id = null)
+    public function delete ( $id = null )
     {
         $id_usuario = Session::get ( 'id_usuario' );
+        $id_producto = [ 'id_producto' => $id ];
 
         try {
 
-            // if ( isset( $_POST[ 'del' ] ) && isset ( $_POST[ 'id_producto' ] ) ) {
-             if ( $id != null) {
+            if ( $id != null ) {
 
-             /*   $foto = $this->producto->get ( [ 'id_producto' => $id])->foto;
-                // Si el registro tiene foto la borramos del servidor
-                if ( $foto ) $this->producto->deleteImage (  $foto );*/
+                $this->producto->deleteImage ( $id_producto );
 
-                $this->producto->delete ( [ 'id_producto' => $id] );
+                $this->producto->delete ( $id_producto );
 
             } else { // Eliminamos todas las entradas
 
-               /*   $fotos = $this->producto->get_all ( ['id_usuario' => $id_usuario ]);
+                $this->producto->deleteImage ( [ 'id_usuario' => $id_usuario ] );
 
-                  // Eliminamos todas las fotos del usuario en el servidor
-                  if ( $fotos ) $this->producto->deleteImage ( $fotos );*/
+                $this->producto->delete ();
 
-                 $this->producto->delete ();
-
-             }
-
-            header ( 'location: /productos/crud' );
+            }
 
         } catch ( PDOException $e ) {
 
             echo 'Error! ' . $e->getMessage () . ' // Lineas-> ' . $e->getLine ();
         }
+
+        header ( 'location: /productos/crud' );
     }
 
 }

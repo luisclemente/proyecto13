@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: luis
- * Date: 3/12/18
- * Time: 13:01
- */
 
 namespace Mini\Model;
 
@@ -29,66 +23,87 @@ class Producto extends Conexion1
         return $stmt->fetchAll ();
     }
 
-    /* LISTA TODAS LOS PRODUCTOS EN LA ZONA PÚBLICA */
-    public function view_all ( $params )
+    /*  public function deleteImage ( $image, $params )
+      {
+          if ($this->getFile ($params)) {
+
+              $imgs = $_SERVER[ 'DOCUMENT_ROOT' ] . '/imgs/';
+
+              if ( is_array ( $image ) !== true ) {
+
+                  if ( file_exists ( $imgs . $image ) ) {
+
+                      unlink ( $imgs . $image );
+                  }
+
+              } else {
+
+                  foreach ( $image as $imag ) {
+
+                      if ( file_exists ( $imgs . $imag->foto ) ) {
+
+                          unlink ( $imgs . $imag->foto );
+                      }
+                  }
+              }
+
+          } else {
+
+
+          }
+
+
+
+      }*/
+
+    public function deleteImage ( $params )
     {
-        foreach ( $params as $producto ) {
+        $foto_antigua = $this->getFile ( $params );
 
-            $id = $producto->id_producto;
+        if ( $foto_antigua ) {
 
-            echo
-                '<div class="container">
-                    <br>Nombre: ' . $producto->nombre . '<br>' .
-                'Descripcion: ' . $producto->descripcion . '<br>' .
-                'Marca: ' . $producto->marca . '<br>' .
-                'Categoria: ' . $producto->categoria . '<br><br>' .
+            $imgs = $_SERVER[ 'DOCUMENT_ROOT' ] . '/imgs/';
 
-                '<form action="ver_producto.php" method="post" style= "padding-left: 450px">
-                            <input type="hidden" name="id" value=" ' . $id . '">
-                            <input type="submit" class="btn btn-primary" name="id_producto" id="id_producto" value="Ver producto">
-                        </form></div>';
+            if ( is_array ( $foto_antigua ) !== true ) {
 
-        }
-    }
+                if ( file_exists ( $imgs . $foto_antigua ) ) {
 
-    public function view_search ( $params )
-    {
-        foreach ( $params as $producto ) {
+                    unlink ( $imgs . $foto_antigua );
+                }
 
-            echo
-                '<div class="caja_entradas cajas"><h3 style="color:cornflowerblue">' . $producto->nombre . '</h3>' .
-                '<span>por </span><span style="color:orange">' . $producto->descripcion . '</span>' . ' >> ' . $producto->fecha .
-                '<p>Categoria: ' . $producto->marca . '</p>' .
-                'Contenido: ' . $producto->categoria . '<br>' .
+            } else {
 
-                /*************     ZONA IMAGENES   *****************/
+                foreach ( $foto_antigua as $imag ) {
 
-                '<div>
-	                    <img src="/exa/imagenes/' . $producto->foto . '" alt="Imagen" width="25%">
-                     </div>' . '</div>';
+                    if ( file_exists ( $imgs . $imag->foto ) ) {
 
-            /*************     END ZONA IMAGENES   *****************/
-        }
-    }
-
-    public function deleteImage ( $image )
-    {
-        if ( is_array ( $image ) !== true ) {
-
-            if ( file_exists ( $_SERVER[ 'DOCUMENT_ROOT' ] . '/exa/imagenes/' . $image ) ) {
-
-                unlink ( $_SERVER[ 'DOCUMENT_ROOT' ] . '/exa/imagenes/' . $image );
+                        unlink ( $imgs . $imag->foto );
+                    }
+                }
             }
+
+        }
+
+
+    }
+
+    public function getFile ( $params )
+    {
+        if ( isset ( $params[ 'id_usuario' ] ) ) { // Si se van a borrar todas las imagenes
+
+            $fotos_antiguas = $this->get_all ( $params );
+
+            return $fotos_antiguas ? $fotos_antiguas : false;
 
         } else {
 
-            foreach ( $image as $imag ) {
+            $foto_antigua = $this->get ( $params )->foto;
 
-                if ( file_exists ( $_SERVER[ 'DOCUMENT_ROOT' ] . '/exa/imagenes/' . $imag->foto ) ) {
+            return $foto_antigua ? $foto_antigua : false;
 
-                    unlink ( $_SERVER[ 'DOCUMENT_ROOT' ] . '/exa/imagenes/' . $imag->foto );
-                }
-            }
         }
+
     }
+
+
 }

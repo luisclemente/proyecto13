@@ -30,7 +30,7 @@ class RegisterController extends Controller
                 'email' => $_POST[ 'email' ],
                 'rol' => $rol,
                 'clave' => $_POST[ 'clave' ],
-                'confirmacion' => $_POST[ 'clave2' ],
+                'confirmacion' => $_POST[ 'clave2' ]
 
             ];
 

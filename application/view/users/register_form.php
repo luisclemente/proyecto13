@@ -113,7 +113,7 @@
     <p><a class="btn btn-outline-primary btn-sm" href="login_form.php">Ir al login</a></p>
     <p><a class="btn btn-outline-primary btn-sm" href="../productos/crud.php">Ir a mi zona de usuario</a></p>
     <p><a class="btn btn-outline-primary btn-sm" href="../index.php">Ir la página principal</a></p>
-    <p><a class="btn btn-outline-primary btn-sm" href="../productos/read.php">Ir a la web</a></p>
+    <p><a class="btn btn-outline-primary btn-sm" href="../productos/read_all.php">Ir a la web</a></p>
 </div>
 
 
