@@ -12,68 +12,41 @@ use Mini\Core\TemplatesFactory;
 
 class LoginController extends Controller
 {
-    public function __construct ()
-    {
-        parent::__construct ();
-    }
-
     public function index ()
     {
+        if ( $_POST ) {
 
-        $v = new Validacion();
-        $user = new Usuario();
-        $data_login = [];
+            $check = $_POST[ 'opción' ];
 
-        if ( isset( $_POST[ 'submit_login' ] ) ) {
+            $this->data = [
+                'opción' => $_POST[ 'opción' ],
+                $check => $_POST[ 'nickemail' ],
+                'clave' => $_POST[ 'clave' ]
+            ];
 
-            if ( ! isset ( $_POST[ 'select' ] ) ) {
+            $this->v->valida_data ( $this->data, $this->v->errors );
 
-                $v->errores [ 'select' ] = 'Debes elegir una opción';
-
-            } else {
-
-                if ( $_POST[ 'select' ] === 'Nick' ) {
-
-                    $data_login = [
-
-                        'nickname' => $_POST[ 'nickemail' ],
-                        'clave' => $_POST[ 'clave' ]
-                    ];
-
-                } elseif ( $_POST[ 'select' ] === 'Email' ) {
-
-                    $data_login = [
-
-                        'email' => $_POST[ 'nickemail' ],
-                        'clave' => $_POST[ 'clave' ]
-                    ];
-                }
-
-                $v->valida_data ( $data_login, $v->errores );
-            }
-
-            echo '<br><br>';
-
-            if ( $v->errores ) echo $this->view->render ( 'users/login_form',
-                [ 'errores' => $v->errores, 'data_login' => $data_login ] );
+            if ( $this->v->errors )
+                self::render ( 'users/login_form', [ 'errors' => $this->v->errors, 'data' => $this->data ] );
 
             else {
 
-                $data_login[ 'clave' ] = $user->codificaClave ( $data_login[ 'clave' ] );
+                $this->data[ 'clave' ] = $this->user->codificaClave ( $this->data[ 'clave' ] );
+                array_shift ( $this->data );
 
                 try {
                     // Comprobamos si existe el usuario en la bd
-                    $user_bd = $user->get ( $data_login );
+                    $user_bd = $this->user->get ( $this->data );
 
-                    if ( ! $user_bd ) $v->errores [ 'db_empty' ] = 'Email o clave son incorrectos';
+                    if ( ! $user_bd ) $this->v->errors [ 'db_empty' ] = 'Email o clave son incorrectos';
 
                 } catch ( PDOException $e ) {
 
                     echo 'Error! ' . $e->getMessage () . ' // Linea-> ' . $e->getLine ();
                 }
 
-                if ( $v->errores ) echo $this->view->render ( 'users/login_form',
-                    ['errores' => $v->errores, 'data_login' => $data_login ] );
+                if ( $this->v->errors )
+                    self::render ( 'users/login_form', [ 'errors' => $this->v->errors, 'data' => $this->data ] );
 
                 else {
 
@@ -84,7 +57,7 @@ class LoginController extends Controller
                     Session::set ( 'nombre', $user_bd->nombre );
                     Session::set ( 'rol', $user_bd->rol );
 
-                    echo (Session::get('nombre'));
+                    echo ( Session::get ( 'nombre' ) );
 
                     $info = date ( 'Y-m-d H:i:s' );
                     setcookie ( 'cookielogin', $info, strtotime ( '+ 30 days' ), '/' );
@@ -94,7 +67,7 @@ class LoginController extends Controller
                 }
             }
 
-        } else echo $this->view->render ( 'users/login_form' );
+        } else self::render ( 'users/login_form' );
 
     }
 }

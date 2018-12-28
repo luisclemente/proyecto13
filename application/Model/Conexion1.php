@@ -47,7 +47,7 @@ class Conexion1 extends Database
 
             $stmt->execute ( $this->normalizePrepareArray ( $params ) );
 
-            $this->setQuery ( $stmt );
+          //  $this->setQuery ( $stmt );
 
             return $this->dbh->lastInsertId ();
 

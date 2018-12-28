@@ -20,39 +20,41 @@
             <!-- EMAIL -->
 
             <div class="form-group">
-                <label for="select">Login</label>
-                <select class="form-control" id="select" name="select">
+                <label for="opción"></label>
+                <select class="form-control" id="opción" name="opción">
 
-                    <?php if ( isset( $_POST[ 'select' ] ) && $_POST[ 'select' ] === 'Nick' ) { ?>
-                        <option value="Nick">Nick</option>
+                    <?php if ( isset( $_POST[ 'opción' ] ) && $_POST[ 'opción' ] === 'nickname' ) { ?>
+                        <option value="nickname">Nickname</option>
                         <option value="Email">Email</option>
 
-                    <?php } elseif ( isset( $_POST[ 'select' ] ) && $_POST[ 'select' ] === 'Email' ) { ?>
-                        <option value="Email">Email</option>
-                        <option value="Nick">Nick</option>
+                    <?php } elseif ( isset( $_POST[ 'opción' ] ) && $_POST[ 'opción' ] === 'email' ) { ?>
+                        <option value="email">Email</option>
+                        <option value="nickname">Nickname</option>
                     <?php } else { ?>
-                        <option value="0" disabled selected>Elige una opción</option>
-                        <option value="Nick">Nick</option>
-                        <option value="Email">Email</option>
+                        <option value="0" selected>Elige una opción</option>
+                        <option value="nickname">Nickname</option>
+                        <option value="email">Email</option>
                     <?php } ?>
 
                 </select>
-                <input type="text" name="nickemail" class="form-control"
-                    <?php if ( isset( $data_login[ 'nickname' ] ) )
-                        echo ' value="' . $data_login[ 'nickname' ] . '"';
-                    elseif ( isset( $data_login[ 'email' ] ) )
-                       echo ' value="' . $data_login[ 'email' ] . '"'; ?>
+                <input type="text" class="form-control" name="nickemail"
+                    <?php if ( isset( $data[ 'nickname' ] ) )
+                        echo ' value="' . $data[ 'nickname' ] . '"';
+                    elseif ( isset( $data[ 'email' ] ) )
+                        echo ' value="' . $data[ 'email' ] . '"';
+                    elseif ( isset( $data[ 'nickemail' ] ) )
+                        echo ' value="' . $data[ 'nickemail' ] . '"'; ?>
                 >
 
                 <?php
-                if ( isset ( $errores [ 'select' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'select' ] . '</span>';
-                elseif ( isset ( $errores [ 'nickname' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'nickname' ] . '</span>';
-                elseif ( isset ( $errores [ 'email' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'email' ] . '</span>';
-                elseif ( isset ( $errores [ 'db_empty' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'db_empty' ] . '</span>';
+                if ( isset ( $errors [ 'opción' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'opción' ] . '</span>';
+                if ( isset ( $errors [ 'nickname' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'nickname' ] . '</span>';
+                if ( isset ( $errors [ 'email' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'email' ] . '</span>';
+                if ( isset ( $errors [ 'db_empty' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'db_empty' ] . '</span>';
 
                 ?>
 
@@ -63,8 +65,8 @@
             <div class="form-group">
                 <label for="clave">Clave</label>
                 <input type="password" name="clave" id="clave" class="form-control">
-                <?php if ( isset ( $errores [ 'clave' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'clave' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'clave' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'clave' ] . '</span>'; ?>
             </div>
 
             <!-- SUBMIT -->

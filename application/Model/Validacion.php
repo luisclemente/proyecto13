@@ -11,9 +11,10 @@ namespace Mini\Model;
 
 use Mini\Model\Conexion1;
 
+
 class Validacion extends Conexion1
 {
-    public $errores = [];
+    public $errors = [];
 
     public $table = 'usuarios';
 
@@ -72,7 +73,7 @@ class Validacion extends Conexion1
 
     private function passwordValido ( $password )
     {
-       // return preg_match ( '/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]){6,}/', $password );
+        // return preg_match ( '/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]){6,}/', $password );
         return true;
     }
 
@@ -109,7 +110,7 @@ class Validacion extends Conexion1
 
     private function duplicateNick ( $nick )
     {
-       // $this->table = 'usuarios';
+        // $this->table = 'usuarios';
 
         $registro = $this->get ( [ 'nickname' => $nick ] );
 
@@ -185,7 +186,7 @@ class Validacion extends Conexion1
 
             $data[ $key ] = $this->validaIsset ( $value );
 
-            if ( $data[ $key ] == false) $params [ $key ] = 'No hemos recibido ' . $key;
+            if ( $data[ $key ] == false ) $params [ $key ] = 'No hemos recibido ' . $key;
         }
     }
 

@@ -28,8 +28,8 @@
                 <label for="nombre">Nombre</label>
                 <input type="text" name="nombre" id="nombre" class="form-control"
                     <?php if ( isset( $data[ 'nombre' ] ) ) echo ' value="' . $data[ 'nombre' ] . '"'; ?>>
-                <?php if ( isset ( $errores [ 'nombre' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'nombre' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'nombre' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'nombre' ] . '</span>'; ?>
 
 
             </div>
@@ -41,8 +41,8 @@
                 <label for="apellidos">Apellido</label>
                 <input type="text" name="apellidos" id="apellidos" class="form-control"
                     <?php if ( isset( $data[ 'apellidos' ] ) ) echo ' value="' . $data[ 'apellidos' ] . '"'; ?>>
-                <?php if ( isset ( $errores [ 'apellidos' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'apellidos' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'apellidos' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'apellidos' ] . '</span>'; ?>
 
             </div>
 
@@ -52,8 +52,8 @@
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" class="form-control"
                     <?php if ( isset( $data[ 'email' ] ) ) echo ' value="' . $data[ 'email' ] . '"'; ?>>
-                <?php if ( isset ( $errores [ 'email' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'email' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'email' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'email' ] . '</span>'; ?>
             </div>
 
             <!-- NICK -->
@@ -62,8 +62,8 @@
                 <label for="nickname">Nick</label>
                 <input type="text" name="nickname" id="nickname" class="form-control"
                     <?php if ( isset( $data[ 'nickname' ] ) ) echo ' value="' . $data[ 'nickname' ] . '"'; ?>>
-                <?php if ( isset ( $errores [ 'nickname' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'nickname' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'nickname' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'nickname' ] . '</span>'; ?>
             </div>
 
             <!-- ROL -->
@@ -75,8 +75,8 @@
                 <input type="radio" name="rol" value="jefe"
                     <?php if ( isset($data[ 'rol' ]) && $data[ 'rol' ] === 'jefe') echo ' checked '; ?>> Jefe<br>
 
-                <?php if ( isset ( $errores [ 'rol' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'rol' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'rol' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'rol' ] . '</span>'; ?>
             </div>
 
 
@@ -85,8 +85,8 @@
             <div class="form-group">
                 <label for="clave">Clave</label>
                 <input type="password" name="clave" id="clave" class="form-control">
-                <?php if ( isset ( $errores [ 'clave' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'clave' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'clave' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'clave' ] . '</span>'; ?>
             </div>
 
             <!-- PASSWORD CONFIRM -->
@@ -94,8 +94,8 @@
             <div class="form-group">
                 <label for="clave2">Repetir Clave</label>
                 <input type="password" name="clave2" id="clave2" class="form-control">
-                <?php if ( isset ( $errores [ 'confirmacion' ] ) )
-                    echo '<span class="errorf">' . $errores[ 'confirmacion' ] . '</span>'; ?>
+                <?php if ( isset ( $errors [ 'confirmacion' ] ) )
+                    echo '<span class="errorf">' . $errors[ 'confirmacion' ] . '</span>'; ?>
             </div>
 
 

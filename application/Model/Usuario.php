@@ -7,7 +7,8 @@ use Mini\Model\Conexion1;
 
 class Usuario extends Conexion1
 {
-    public $table = 'usuarios';
+    //public $table = 'usuarios';
+    public $table = 'categorias';
 
     public function insert ( $params )
     {
