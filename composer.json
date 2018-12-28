@@ -15,11 +15,13 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "league/plates": "3.3.*"
+        "league/plates": "3.3.*",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "kint-php/kint": "dev-master"
     },
+
     "autoload":
     {
         "psr-4":

@@ -3,6 +3,7 @@
 namespace Mini\Controller;
 
 use Mini\Core\Controller;
+use PDOException;
 
 class RegisterController extends Controller
 {
@@ -11,10 +12,9 @@ class RegisterController extends Controller
         if ( $_POST ) {
 
             var_dump ( $_POST );
+            echo '<br>';
 
-            $rol = '';
-
-            if ( isset ( $_POST[ 'rol' ] ) ) $rol = $this->v->filtrar ( $_POST[ 'rol' ] );
+            $rol = isset ( $_POST[ 'rol' ] ) ? $this->v->filtrar ( $_POST[ 'rol' ] ) : '';
 
             $data = [
 
@@ -38,24 +38,13 @@ class RegisterController extends Controller
 
                     array_pop ( $data );
 
-                    $registro_ok = $this->user->insert ( $data );
-
-                    if ( ! $registro_ok ){} //self::render ( 'users/register_form' );
-
-                    else { ?>
-
-
-                        <div class="caja_enlaces">
-                            <h1>Todo correcto, usuario registrado</h1><br>
-                        </div>
-
-                    <?php }
-
+                    $this->user->insert ( $data );
                 }
 
             } catch ( PDOException $e ) {
 
-                echo 'Error! ' . $e->getMessage () . ' // Linea-> ' . $e->getLine ();
+                echo 'Error! ' . $e->getMessage () . ' // Linea-> ' . $e->getLine ();   
+                self::render ( 'users/register_form' );
             }
 
 

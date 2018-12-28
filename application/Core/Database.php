@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: daw17-15
- * Date: 13/11/18
- * Time: 16:11
- */
 
 namespace Mini\Core;
 
 use PDO;
+use PDOException;
 
 class Database
 {
@@ -18,7 +13,7 @@ class Database
     private function __construct ()
     {
         $options = [ PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING ];
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ];
 
         try {
 
